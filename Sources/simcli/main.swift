@@ -5,7 +5,8 @@ import Foundation
 struct simctlcli: ParsableCommand {
     static let configuration = CommandConfiguration(
         abstract: "A Swift command-line for managing the simulator",
-        subcommands: [Compile.self])
+        subcommands: [Compile.self, Replace.self]
+    )
     
     init() { }
 }
@@ -63,6 +64,39 @@ struct Compile: ParsableCommand {
         
         let result = Process().build("-workspace", "\(path)", "-scheme", "\(scheme)", "-destination", "\(destination)", "-sdk", "\(sdk)", "build")
         print("Result: \(String(result))")
+    }
+}
+
+struct Replace: ParsableCommand {
+    public static let configuration = CommandConfiguration(abstract: "Replace version in CartFile")
+    
+    @Argument(help: "The path of the Cartfile")
+    private var path: String
+    
+    @Option(name: .shortAndLong, default: "1.67", help: "The version to add")
+    private var version: String
+    
+    func run() throws {
+        
+        let fileManager: FileManager = FileManager.default
+       
+        let stringToCopy = """
+        # Rainbow SDK binary framework
+        binary "https://sdk.openrainbow.io/ios/carthage/RainbowSDK.json" == \(version)\n
+        """
+        
+        if (fileManager.fileExists(atPath: path)) {
+            do {
+                print("Replace with version: \(version)...")
+                try stringToCopy.write(toFile: path, atomically: true, encoding: .unicode)
+                print("Replaced!")
+            }
+            catch {
+                print("Error: \(error)")
+            }
+        } else {
+            print("File not found: \(path)")
+        }
     }
 }
 

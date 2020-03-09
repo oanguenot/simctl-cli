@@ -34,7 +34,7 @@ extension Process {
     }
     
     @discardableResult
-    func xcrun(_ args: String...) -> Data {
+    func xcrun(_ args: String...) -> Int {
         return self.exe(command: "/usr/bin/xcrun", args)
     }
     
@@ -44,13 +44,13 @@ extension Process {
     }
     
     /// Executes `xcrun simctl list devices`
-    @discardableResult
-    func xcrun_list_devices() -> Data {
-        return self.xcrun("simctl", "list", "devices", "-j")
-    }
-
-    func xcrun_erase(_ device: String) {
-        self.xcrun("simctl", "erase", device)
-    }
+//    @discardableResult
+//    func xcrun_list_devices() -> Data {
+//        //return self.xcrun("simctl", "list", "devices", "-j")
+//    }
+//
+//    func xcrun_erase(_ device: String) {
+//        //self.xcrun("simctl", "erase", device)
+//    }
 }
 

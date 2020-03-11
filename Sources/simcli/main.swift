@@ -5,7 +5,7 @@ import Foundation
 struct simctlcli: ParsableCommand {
     static let configuration = CommandConfiguration(
         abstract: "A Swift command-line for managing the simulator",
-        subcommands: [Compile.self, Replace.self]
+        subcommands: [Compile.self, Replace.self, Download.self]
     )
     
     init() { }
@@ -58,12 +58,20 @@ struct Compile: ParsableCommand {
     private var verbose: Bool
 
     func run() throws {
+        print("[Compile] \(path) using scheme \(scheme)")
+        
         if verbose {
-            print("Compile...")
+            print("using destination \(destination)")
+            print("using SDK \(sdk)")
         }
         
-        let result = Process().build("-workspace", "\(path)", "-scheme", "\(scheme)", "-destination", "\(destination)", "-sdk", "\(sdk)", "build")
-        print("Result: \(String(result))")
+        let result: Result<CommandResult, CommandError> = Process().build(withVerboseMode: verbose, "-workspace", "\(path)", "-scheme", "\(scheme)", "-destination", "\(destination)", "-sdk", "\(sdk)", "build")
+        switch result {
+        case .success(_):
+            print("\n✅ Successfully compiled")
+        case .failure(let error):
+            print("\n❌ Compilation failed with code \(String(error.code))")
+        }
     }
 }
 
@@ -76,7 +84,11 @@ struct Replace: ParsableCommand {
     @Option(name: .shortAndLong, default: "1.67", help: "The version to add")
     private var version: String
     
+    @Flag(name: .long, help: "Show extra logging for debugging purposes")
+    private var verbose: Bool
+    
     func run() throws {
+        print("[Replace] Update Carthage file \(path) to Rainbow SDK version \(version)")
         
         let fileManager: FileManager = FileManager.default
        
@@ -87,18 +99,46 @@ struct Replace: ParsableCommand {
         
         if (fileManager.fileExists(atPath: path)) {
             do {
-                print("Replace with version: \(version)...")
-                try stringToCopy.write(toFile: path, atomically: true, encoding: .unicode)
-                print("Replaced!")
+                if(verbose) {
+                    print("file has been found")
+                }
+                
+                try stringToCopy.write(toFile: path, atomically: true, encoding: .utf8)
+                
+                if(verbose) {
+                    print("version replaced and file updated")
+                }
+                print("\n✅ Successfully replaced")
             }
             catch {
-                print("Error: \(error)")
+                print("\n❌ Replace failed - error \(error.localizedDescription)")
             }
         } else {
-            print("File not found: \(path)")
+            print("\n❌ Replace failed - file not found \(path)")
+        }
+    }
+}
+
+struct Download: ParsableCommand {
+    public static let configuration = CommandConfiguration(abstract: "Download Rainbow SDK")
+    
+    @Argument(help: "The path of the Cartfile")
+    private var path: String
+    
+    @Flag(name: .long, help: "Show extra logging for debugging purposes")
+    private var verbose: Bool
+    
+    func run() throws {
+        print("[Download] Rainbow SDK in directory \(path)")
+        
+        let result: Result<CommandResult, CommandError> = Process().carthage(withVerboseMode: verbose, "update", "--project-directory", path)
+        switch result {
+        case .success(_):
+            print("\n✅ Successfully downloaded")
+        case .failure(let error):
+            print("\n❌ Download failed with code \(String(error.code))")
         }
     }
 }
 
 simctlcli.main()
-

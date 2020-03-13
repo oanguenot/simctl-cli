@@ -18,7 +18,7 @@ struct CommandError: Error {
 
 struct CommandResult {
     var code: Int
-    var data: Any?
+    var data: Data
 }
 
 extension Process {
@@ -26,9 +26,7 @@ extension Process {
     @discardableResult
     func exe(command: String, withVerboseMode: Bool, _ args: [String]) -> Result<CommandResult, CommandError> {
         
-        if(withVerboseMode) {
-            print ("executing exe command \(command)...")
-        }
+        logging(verbose: withVerboseMode, text:"executing exe command \(command)...")
         
         self.launchPath = command
         self.arguments = args
@@ -41,20 +39,15 @@ extension Process {
         self.waitUntilExit()
         
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
-        let output = String(data: data, encoding: .utf8)
-        
-        if(withVerboseMode) {
-            print("output: \(String(describing: output))")
-        }
-        
+        //let output = String(data: data, encoding: .utf8)
+
         if self.terminationStatus != 0 {
             return .failure(CommandError(code: Int(self.terminationStatus), type: .NOT_TERMINATED))
         } else {
-            return .success(CommandResult(code: Int(self.terminationStatus), data: output))
+            return .success(CommandResult(code: Int(self.terminationStatus), data: data))
         }
-        
     }
-    
+
     @discardableResult
     func xcrun(withVerboseMode: Bool = false, _ args: String...) -> Result<CommandResult, CommandError> {
         return self.exe(command: "/usr/bin/xcrun", withVerboseMode: withVerboseMode, args)
@@ -70,16 +63,9 @@ extension Process {
         return self.exe(command: "/usr/local/bin/carthage", withVerboseMode: withVerboseMode, args)
     }
     
-    
-    
-    /// Executes `xcrun simctl list devices`
-//    @discardableResult
-//    func xcrun_list_devices() -> Data {
-//        //return self.xcrun("simctl", "list", "devices", "-j")
-//    }
-//
-//    func xcrun_erase(_ device: String) {
-//        //self.xcrun("simctl", "erase", device)
-//    }
+    @discardableResult
+    func open(withVerboseMode: Bool = false,_ args: String...) -> Result<CommandResult, CommandError> {
+        return self.exe(command: "/usr/bin/open", withVerboseMode: withVerboseMode, args)
+    }
 }
 

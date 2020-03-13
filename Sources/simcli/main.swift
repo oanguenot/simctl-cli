@@ -48,7 +48,7 @@ struct Compile: ParsableCommand {
         case .success(_):
             logging(verbose: true, text: "\n✅ Successfully compiled")
         case .failure(let error):
-            logging(verbose: true, text: "\n❌ Compilation failed with code \(String(error.code))")
+            throw RuntimeError("Couldn't compile the application due to error \(String(error.code))!")
         }
     }
 }
@@ -85,10 +85,10 @@ struct Replace: ParsableCommand {
                 logging(verbose: true, text: "\n✅ Successfully replaced")
             }
             catch {
-                logging(verbose: true, text: "\n❌ Replace failed - error \(error.localizedDescription)")
+                throw RuntimeError("Couldn't replace the version due to error \(String(error.code))!")
             }
         } else {
-            logging(verbose: true, text: "\n❌ Replace failed - file not found \(path)")
+            throw RuntimeError("Couldn't find the file in path \(path)!")
         }
     }
 }
@@ -110,7 +110,7 @@ struct Download: ParsableCommand {
         case .success(_):
             logging(verbose: true, text: "\n✅ Successfully downloaded")
         case .failure(let error):
-            logging(verbose: true, text: "\n❌ Download failed with code \(String(error.code))")
+            throw RuntimeError("Couldn't download the library due to error \(String(error.code))!")
         }
     }
 }

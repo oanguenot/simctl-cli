@@ -39,8 +39,9 @@ extension Process {
         self.waitUntilExit()
         
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
-        //let output = String(data: data, encoding: .utf8)
-
+        let output = String(data: data, encoding: .utf8) ?? ""
+        logging(verbose: withVerboseMode, text:output)
+        
         if self.terminationStatus != 0 {
             return .failure(CommandError(code: Int(self.terminationStatus), type: .NOT_TERMINATED))
         } else {

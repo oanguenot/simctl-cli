@@ -12,7 +12,7 @@ struct RuntimeError: Error, CustomStringConvertible {
 struct simctlcli: ParsableCommand {
     static let configuration = CommandConfiguration(
         abstract: "A Swift command-line for managing the simulator",
-        subcommands: [Compile.self, Replace.self, Download.self, Start.self]
+        subcommands: [Compile.self, Replace.self, Download.self, Start.self, Install.self, Launch.self]
     )
     
     init() { }
@@ -43,7 +43,7 @@ struct Compile: ParsableCommand {
         logging(verbose: verbose, text: "using destination \(destination)")
         logging(verbose: verbose, text: "using SDK \(sdk)")
         
-        let result: Result<CommandResult, CommandError> = Process().build(withVerboseMode: verbose, "-workspace", "\(path)", "-scheme", "\(scheme)", "-destination", "\(destination)", "-sdk", "\(sdk)", "build")
+        let result: Result<CommandResult, CommandError> = Process().build(withVerboseMode: verbose, "-workspace", "\(path)", "-scheme", "\(scheme)", "-destination", "\(destination)", "-sdk", "\(sdk)", "-derivedDataPath", "./build", "build")
         switch result {
         case .success(_):
             logging(verbose: true, text: "\n✅ Successfully compiled")
@@ -85,7 +85,7 @@ struct Replace: ParsableCommand {
                 logging(verbose: true, text: "\n✅ Successfully replaced")
             }
             catch {
-                throw RuntimeError("Couldn't replace the version due to error \(String(error.code))!")
+                throw RuntimeError("Couldn't replace the version due to error \(error.localizedDescription))!")
             }
         } else {
             throw RuntimeError("Couldn't find the file in path \(path)!")
@@ -217,6 +217,50 @@ struct Start: ParsableCommand {
         }
         
         logging(verbose: true, text: "\n✅ Successfully started \(name) [\(udid)]")
+    }
+}
+
+struct Install: ParsableCommand {
+    public static let configuration = CommandConfiguration(abstract: "Install the application")
+    
+    @Argument(help: "The name of the application")
+    private var name: String
+    
+    @Flag(name: .long, help: "Show extra logging for debugging purposes")
+    private var verbose: Bool
+    
+    func run() throws {
+        logging(verbose: true, text: "[SIMCLI] Install application \(name)")
+        
+        let result: Result<CommandResult, CommandError> = Process().xcrun(withVerboseMode: verbose, "simctl", "install", "booted", "./build/Build/Products/Debug-iphonesimulator/\(name).app")
+        switch result {
+        case .success(_):
+            logging(verbose: true, text: "\n✅ Successfully installed")
+        case .failure(let error):
+            throw RuntimeError("Couldn't install the application \(name) due to error \(String(error.code))!")
+        }
+    }
+}
+
+struct Launch: ParsableCommand {
+    public static let configuration = CommandConfiguration(abstract: "Launch the application")
+    
+    @Argument(help: "The bundle identifier of the application")
+    private var bundleId: String
+    
+    @Flag(name: .long, help: "Show extra logging for debugging purposes")
+    private var verbose: Bool
+    
+    func run() throws {
+        logging(verbose: true, text: "[SIMCLI] Launch application \(bundleId)")
+        
+        let result: Result<CommandResult, CommandError> = Process().xcrun(withVerboseMode: verbose, "simctl", "launch", "booted", bundleId)
+        switch result {
+        case .success(_):
+            logging(verbose: true, text: "\n✅ Successfully launched")
+        case .failure(let error):
+            throw RuntimeError("Couldn't launch the application \(bundleId) due to error \(String(error.code))!")
+        }
     }
 }
 

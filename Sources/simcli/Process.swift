@@ -68,5 +68,10 @@ extension Process {
     func open(withVerboseMode: Bool = false,_ args: String...) -> Result<CommandResult, CommandError> {
         return self.exe(command: "/usr/bin/open", withVerboseMode: withVerboseMode, args)
     }
+    
+    @discardableResult
+    func utils(withVerboseMode: Bool = false,_ args: String...) -> Result<CommandResult, CommandError> {
+        return self.exe(command: "/usr/local/bin/applesimutils", withVerboseMode: withVerboseMode, args)
+    }
 }
 

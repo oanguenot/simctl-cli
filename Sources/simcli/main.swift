@@ -12,7 +12,7 @@ struct RuntimeError: Error, CustomStringConvertible {
 struct simctlcli: ParsableCommand {
     static let configuration = CommandConfiguration(
         abstract: "A Swift command-line for managing the simulator",
-        subcommands: [Compile.self, Replace.self, Download.self, Start.self, Install.self, Launch.self]
+        subcommands: [Compile.self, Replace.self, Download.self, Start.self, Install.self, Launch.self, Setpermissions.self]
     )
     
     init() { }
@@ -263,5 +263,29 @@ struct Launch: ParsableCommand {
         }
     }
 }
+
+struct Setpermissions: ParsableCommand {
+    public static let configuration = CommandConfiguration(abstract: "Set application needed permissions")
+    
+    @Argument(help: "The bundle identifier of the application")
+    private var bundleId: String
+    
+    @Flag(name: .long, help: "Show extra logging for debugging purposes")
+    private var verbose: Bool
+    
+    func run() throws {
+        logging(verbose: true, text: "[SIMCLI] Set permissions for \(bundleId)")
+        
+        let result: Result<CommandResult, CommandError> = Process().utils(withVerboseMode: verbose, "booted", "--bundle", bundleId, "--setPermissions", "microphone=YES")
+        switch result {
+        case .success(_):
+            logging(verbose: true, text: "\n✅ Successfully set")
+        case .failure(let error):
+            throw RuntimeError("Couldn't set permissions for application \(bundleId) due to error \(String(error.code))!")
+        }
+    }
+}
+
+
 
 simctlcli.main()

@@ -35,16 +35,27 @@ extension Process {
         self.standardOutput = pipe
         self.standardError = pipe
         
-        self.launch()
+        if #available(OSX 10.14, *) {
+            do {
+                try self.run()
+            } catch {
+                logging(verbose: true, text:"Couldn't terminate the command - \(error.localizedDescription)")
+                return .failure(CommandError(code: -1, type: .NOT_TERMINATED))
+            }
+        } else {
+            self.launch()
+        }
+        
         self.waitUntilExit()
         
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let output = String(data: data, encoding: .utf8) ?? ""
-        logging(verbose: withVerboseMode, text:output)
         
         if self.terminationStatus != 0 {
+            logging(verbose: true, text:output)
             return .failure(CommandError(code: Int(self.terminationStatus), type: .NOT_TERMINATED))
         } else {
+            logging(verbose: withVerboseMode, text:output)
             return .success(CommandResult(code: Int(self.terminationStatus), data: data))
         }
     }

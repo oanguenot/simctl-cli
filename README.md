@@ -1,6 +1,6 @@
 # simctl-cli
 
-Experimentation in Swift around [Swift-Argument-Parser](https://github.com/apple/swift-argument-parser) to build a CLI tool for automating tasks around building and launching a tests application in the Simulator.
+Experimental command line tool written in Swift using [Swift-Argument-Parser](https://github.com/apple/swift-argument-parser) for automating tasks needed to test an application in the Simulator.
 
 ## Description
 
@@ -13,9 +13,9 @@ This tool allows to
 -   Select the Rainbow SDK version to use from Carthage (ie: replace the version in `Cartfile`)
 -   Install it into the application path (ie: `carthage update`)
 -   Compile the application using `xcodebuild`
--   Start a `simulator`
--   Copy binary into it
--   Authorize the applicatio to access the microphone (needed by the SDK)
+-   Start a `Simulator`
+-   Install / uninstall application on Simulator
+-   Authorize the application to access the microphone (needed by the SDK)
 -   Start the app and automatically launch the tests
 -   Get the result file
 
@@ -23,7 +23,9 @@ This tool is deeply linked to Rainbow in a first step but the goal is to have at
 
 ## Prerequisites
 
-[Apple Simulator Utils](https://github.com/wix/AppleSimulatorUtils) should be installed to set the application permissions
+[Apple Simulator Utils](https://github.com/wix/AppleSimulatorUtils) should be installed to set the application permissions.
+
+This is subject to change as rumors say that in Xcode 11.4, application's permissions will be managed directly in the Simulator for easing tests.
 
 ## Commands
 
@@ -59,7 +61,7 @@ $ simcli compile "/Users/oan/github/afterbuildios/AfterbuildTest.xcworkspace" --
 
 ```
 
-### Start the simulator
+### Start the Simulator
 
 This command does several things:
 
@@ -75,7 +77,17 @@ $ simcli start --model "iPhone 8"
 
 ```
 
-### Install binary
+### Stop all running Simulators
+
+In case you need to stop all simulators, use that command:
+
+```bash
+
+$ simcli stop
+
+```
+
+### Install an application
 
 This command copy the binary to the simulator
 
@@ -84,6 +96,20 @@ This command copy the binary to the simulator
 $ simcli install "AfterbuildTest"
 
 ```
+
+_Note_: This commands requires the name of the application.
+
+### Uninstall an application
+
+In case, you need to uninstall the application from the Simulator, use that command
+
+```bash
+
+$ simcli uninstall "com.olivier.AfterbuildTest"
+
+```
+
+_Note_: This commands requires the bundleId of the application.
 
 ### Set permissions
 
@@ -95,6 +121,8 @@ This command (based on **Apple Simulator Utils**) authorize the application auto
 
 $ simcli setpermissions "com.olivier.AfterbuildTest"
 
+_Note_: This commands requires the bundleId of the application.
+
 ```
 
 ### Start the application
@@ -104,6 +132,8 @@ The application can be started by launching the command:
 ```bash
 
 $ simcli launch "com.olivier.AfterbuildTest"
+
+_Note_: This commands requires the bundleId of the application.
 
 ```
 

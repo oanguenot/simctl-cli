@@ -20,7 +20,9 @@ struct simctlcli: ParsableCommand {
             Install.self,
             Uninstall.self,
             Launch.self,
-            Setpermissions.self]
+            Setpermissions.self,
+            Stop.self
+        ]
     )
     
     init() { }

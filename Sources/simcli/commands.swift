@@ -37,8 +37,8 @@ struct Compile: ParsableCommand {
         switch result {
         case .success(_):
             logging(verbose: true, text: "\n✅ Successfully compiled")
-        case .failure(let error):
-            throw RuntimeError("Couldn't compile the application due to error \(error.localizedDescription)")
+        case .failure(_):
+            throw RuntimeError("Couldn't compile the application!")
         }
     }
 }
@@ -75,7 +75,7 @@ struct Replace: ParsableCommand {
                 logging(verbose: true, text: "\n✅ Successfully replaced")
             }
             catch {
-                throw RuntimeError("Couldn't replace the version due to error \(error.localizedDescription))!")
+                throw RuntimeError("Couldn't replace the version!")
             }
         } else {
             throw RuntimeError("Couldn't find the file in path \(path)!")
@@ -99,8 +99,8 @@ struct Download: ParsableCommand {
         switch result {
         case .success(_):
             logging(verbose: true, text: "\n✅ Successfully downloaded")
-        case .failure(let error):
-            throw RuntimeError("Couldn't download the library due to error \(error.localizedDescription)!")
+        case .failure(_):
+            throw RuntimeError("Couldn't download the library!")
         }
     }
 }
@@ -190,8 +190,8 @@ struct Start: ParsableCommand {
         switch bootResult {
         case .success(_):
             logging(verbose: verbose, text: "\(model) simulator has been started")
-        case .failure(let error):
-            throw RuntimeError("Couldn't get simulator start due to error '\(String(error.code))'!")
+        case .failure(_):
+            throw RuntimeError("Couldn't get simulator start!")
         }
         
         // display it
@@ -201,8 +201,8 @@ struct Start: ParsableCommand {
             switch displayResult {
             case .success(_):
                 logging(verbose: verbose, text: "\(model) simulator has been displayed")
-            case .failure(let error):
-                throw RuntimeError("Couldn't get simulator display due to error '\(String(error.code))'!")
+            case .failure(_):
+                throw RuntimeError("Couldn't get simulator display!")
             }
         }
         
@@ -248,8 +248,27 @@ struct Uninstall: ParsableCommand {
         switch result {
         case .success(_):
             logging(verbose: true, text: "\n✅ Successfully uninstalled")
-        case .failure(let error):
-            throw RuntimeError("Couldn't uninstall application \(bundleId) due to error \(String(error.code))!")
+        case .failure(_):
+            throw RuntimeError("Couldn't uninstall application \(bundleId)!")
+        }
+    }
+}
+
+struct Stop: ParsableCommand {
+    public static let configuration = CommandConfiguration(abstract: "Stop all simulators launched")
+    
+    @Flag(name: .long, help: "Show extra logging for debugging purposes")
+    private var verbose: Bool
+    
+    func run() throws {
+        logging(verbose: true, text: "[SIMCLI] Stop all running Simulator")
+        
+        let result: Result<CommandResult, CommandError> = Process().xcrun(withVerboseMode: verbose, "simctl", "shutdown", "all")
+        switch result {
+        case .success(_):
+            logging(verbose: true, text: "\n✅ Successfully stopped")
+        case .failure(_):
+            throw RuntimeError("Couldn't execute the command!")
         }
     }
 }
@@ -270,8 +289,8 @@ struct Launch: ParsableCommand {
         switch result {
         case .success(_):
             logging(verbose: true, text: "\n✅ Successfully launched")
-        case .failure(let error):
-            throw RuntimeError("Couldn't launch the application \(bundleId) due to error \(String(error.code))!")
+        case .failure(_):
+            throw RuntimeError("Couldn't launch the application \(bundleId)!")
         }
     }
 }
@@ -292,8 +311,8 @@ struct Setpermissions: ParsableCommand {
         switch result {
         case .success(_):
             logging(verbose: true, text: "\n✅ Successfully set")
-        case .failure(let error):
-            throw RuntimeError("Couldn't set permissions for application \(bundleId) due to error \(String(error.code))!")
+        case .failure(_):
+            throw RuntimeError("Couldn't set permissions for application \(bundleId)!")
         }
     }
 }

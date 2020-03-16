@@ -13,15 +13,16 @@ struct simctlcli: ParsableCommand {
     static let configuration = CommandConfiguration(
         abstract: "An experimental Swift command-line tool for managing the Simulator",
         subcommands: [
-            Compile.self,
-            Replace.self,
-            Download.self,
-            Start.self,
-            Install.self,
-            Uninstall.self,
-            Launch.self,
-            Setpermissions.self,
-            Stop.self
+            Appcompile.self,
+            Appreplace.self,
+            Appdownload.self,
+            Simustart.self,
+            Simustop.self,
+            Appinstall.self,
+            Appuninstall.self,
+            Applaunch.self,
+            Appterminate.self,
+            Appsetpermissions.self
         ]
     )
     

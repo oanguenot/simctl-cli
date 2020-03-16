@@ -1,4 +1,4 @@
-# simctl-cli
+# simcli
 
 Experimental command line tool written in Swift using [Swift-Argument-Parser](https://github.com/apple/swift-argument-parser) for automating tasks needed to test an application in the Simulator.
 
@@ -29,39 +29,39 @@ This is subject to change as rumors say that in Xcode 11.4, application's permis
 
 ## Commands
 
-### Replace
+### Update Carthage file
 
 This command replace the version of the [Rainbow SDK](https://hub.openrainbow.com) library used in the `Carthage` file.
 
 ```bash
 
-$ simcli replace "/Users/oan/github/afterbuildios/AfterbuildTest/Cartfile" --version "1.70.5"
+$ simcli appreplace "/Users/oan/github/afterbuildios/AfterbuildTest/Cartfile" --version "1.70.5"
 
 ```
 
-### Update
+### Update Carthage dependencies
 
 This command updates the application by download and installing the right version of the Rainbow SDK from Carthage. This command is equivalent to `carthage update`.
 
 ```bash
 
-$ simcli download "/Users/oan/github/afterbuildios/AfterbuildTest"
+$ simcli appdownload "/Users/oan/github/afterbuildios/AfterbuildTest"
 
 ```
 
 The path corresponds to the `Cartfile` folder.
 
-### Compile
+### Compile application
 
 This application compiles the application by selecting the project and the scheme.
 
 ```bash
 
-$ simcli compile "/Users/oan/github/afterbuildios/AfterbuildTest.xcworkspace" --scheme "AfterbuildTest"
+$ simcli appcompile "/Users/oan/github/afterbuildios/AfterbuildTest.xcworkspace" --scheme "AfterbuildTest"
 
 ```
 
-### Start the Simulator
+### Starting simulator
 
 This command does several things:
 
@@ -73,17 +73,17 @@ This command does several things:
 
 ```bash
 
-$ simcli start --model "iPhone 8"
+$ simcli simustart --model "iPhone 8"
 
 ```
 
-### Stop all running Simulators
+### Stopping all running Simulators
 
 In case you need to stop all simulators, use that command:
 
 ```bash
 
-$ simcli stop
+$ simcli simustop
 
 ```
 
@@ -93,7 +93,7 @@ This command copy the binary to the simulator
 
 ```bash
 
-$ simcli install "AfterbuildTest"
+$ simcli appinstall "AfterbuildTest"
 
 ```
 
@@ -105,13 +105,13 @@ In case, you need to uninstall the application from the Simulator, use that comm
 
 ```bash
 
-$ simcli uninstall "com.olivier.AfterbuildTest"
+$ simcli appuninstall "com.olivier.AfterbuildTest"
 
 ```
 
 _Note_: This commands requires the bundleId of the application.
 
-### Set permissions
+### Setting permissions
 
 The application needs to access the microphone (ie: a popup to authorize the application is displayed when the application starts) to work properly.
 
@@ -119,22 +119,34 @@ This command (based on **Apple Simulator Utils**) authorize the application auto
 
 ```bash
 
-$ simcli setpermissions "com.olivier.AfterbuildTest"
-
-_Note_: This commands requires the bundleId of the application.
+$ simcli appsetpermissions "com.olivier.AfterbuildTest"
 
 ```
 
-### Start the application
+_Note_: This commands requires the bundleId of the application.
 
-The application can be started by launching the command:
+### Starting an application
+
+An application can be started by launching the command:
 
 ```bash
 
-$ simcli launch "com.olivier.AfterbuildTest"
+$ simcli applaunch "com.olivier.AfterbuildTest"
+
+```
 
 _Note_: This commands requires the bundleId of the application.
 
+### Stopping an application
+
+An application can be started by launching the command:
+
+```bash
+
+$ simcli appterminate "com.olivier.AfterbuildTest"
+
 ```
+
+_Note_: This commands requires the bundleId of the application.
 
 ### To complete...

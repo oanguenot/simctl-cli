@@ -131,15 +131,29 @@ An application can be started by launching the command:
 
 ```bash
 
-$ simcli applaunch "com.olivier.AfterbuildTest"
+$ simcli applaunch "com.olivier.AfterbuildTest" --args "Login,Contacts"
 
 ```
 
 _Note_: This commands requires the bundleId of the application.
 
+Argument `args` is used to send parameters to the application. In the case of **Afterbuild**, this is the **tests campaign** to launch automatically on application start.
+
+Application can handle that argument using the `userDefaults` such as the following example
+
+```swift
+
+ if let tests = UserDefaults.standard.string(forKey: "args") {
+     // Do something with the value received
+    let listOfTests = tests.split(separator: ",").map { String($0).trimmingCharacters(in: .whitespaces) }
+    run(listOfTests)
+ }
+
+```
+
 ### Stopping an application
 
-An application can be started by launching the command:
+An application can be stopped by launching the command:
 
 ```bash
 

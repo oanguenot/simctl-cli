@@ -158,10 +158,13 @@ struct Applaunch: ParsableCommand {
     @Flag(name: .long, help: "Show extra logging for debugging purposes")
     private var verbose: Bool
     
+    @Option(name: .shortAndLong, default: "", help: "The tests to launch using a comma delimited string (ex: test_A,test_B)")
+    private var args: String
+    
     func run() throws {
         logging(verbose: true, text: "[SIMCLI] Launch application \(bundleId)")
         
-        let result: Result<CommandResult, CommandError> = Process().xcrun(withVerboseMode: verbose, "simctl", "launch", "booted", bundleId, "--console")
+        let result: Result<CommandResult, CommandError> = Process().xcrun(withVerboseMode: verbose, "simctl", "launch", "booted", bundleId, "-args", args)
         switch result {
         case .success(_):
             logging(verbose: true, text: "\n✅ Successfully launched")

@@ -33,7 +33,7 @@ struct Appcompile: ParsableCommand {
         logging(verbose: verbose, text: "using destination \(destination)")
         logging(verbose: verbose, text: "using SDK \(sdk)")
         
-        let result: Result<CommandResult, CommandError> = Process().build(withVerboseMode: verbose, "-workspace", "\(path)", "-scheme", "\(scheme)", "-destination", "\(destination)", "-sdk", "\(sdk)", "-derivedDataPath", "./build", "build")
+        let result: Result<CommandResult, CommandError> = Process().build(withVerboseMode: verbose, withCapture: false, "-workspace", "\(path)", "-scheme", "\(scheme)", "-destination", "\(destination)", "-sdk", "\(sdk)", "-derivedDataPath", "./build", "clean", "build")
         switch result {
         case .success(_):
             logging(verbose: true, text: "\n✅ Successfully compiled")

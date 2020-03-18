@@ -19,7 +19,7 @@ This tool allows to
 -   Start the app and automatically launch the tests
 -   Get the result file
 
-This tool is deeply linked to Rainbow in a first step but the goal is to have at the end an agnostic CLI tool that help testers to automate their testing flows.
+This tool is deeply linked to [Rainbow](https://www.openrainbow.com) in a first step but the goal is to have at the end an agnostic CLI tool that help testers to automate their testing flows.
 
 ## Prerequisites
 
@@ -31,7 +31,7 @@ This is subject to change as rumors say that in Xcode 11.4, application's permis
 
 ### Update Carthage file
 
-This command replace the version of the [Rainbow SDK](https://hub.openrainbow.com) library used in the `Carthage` file.
+This command replaces the version of the [Rainbow SDK](https://hub.openrainbow.com) library used in the `Carthage` file.
 
 ```bash
 
@@ -41,7 +41,7 @@ $ simcli appreplace "/Users/oan/github/afterbuildios/AfterbuildTest/Cartfile" --
 
 ### Update Carthage dependencies
 
-This command updates the application by download and installing the right version of the Rainbow SDK from Carthage. This command is equivalent to `carthage update`.
+This command updates the application by downloading and installing the right version of the Rainbow SDK from Carthage. This command is equivalent to `carthage update`.
 
 ```bash
 
@@ -53,7 +53,7 @@ The path corresponds to the `Cartfile` folder.
 
 ### Compile application
 
-This application compiles the application by selecting the project and the scheme.
+This command compiles the application by selecting the project and the scheme.
 
 ```bash
 
@@ -89,7 +89,7 @@ $ simcli simustop
 
 ### Install an application
 
-This command copy the binary to the simulator
+This command copies the binary to the simulator
 
 ```bash
 
@@ -97,7 +97,7 @@ $ simcli appinstall "AfterbuildTest"
 
 ```
 
-_Note_: This commands requires the name of the application.
+_Note_: This command requires the name of the application.
 
 ### Uninstall an application
 
@@ -109,13 +109,13 @@ $ simcli appuninstall "com.olivier.AfterbuildTest"
 
 ```
 
-_Note_: This commands requires the bundleId of the application.
+_Note_: This command requires the bundleId of the application.
 
 ### Setting permissions
 
 The application needs to access the microphone (ie: a popup to authorize the application is displayed when the application starts) to work properly.
 
-This command (based on **Apple Simulator Utils**) authorize the application automatically (ie: without user interaction).
+This command (based on **Apple Simulator Utils**) authorizes the application automatically (ie: without user interaction).
 
 ```bash
 
@@ -123,11 +123,11 @@ $ simcli appsetpermissions "com.olivier.AfterbuildTest"
 
 ```
 
-_Note_: This commands requires the bundleId of the application.
+_Note_: This command requires the bundleId of the application.
 
 ### Starting an application
 
-An application can be started by launching the command:
+An application is started by launching the command:
 
 ```bash
 
@@ -135,11 +135,11 @@ $ simcli applaunch "com.olivier.AfterbuildTest" --args "Login,Contacts"
 
 ```
 
-_Note_: This commands requires the bundleId of the application.
+_Note_: This command requires the bundleId of the application.
 
-Argument `args` is used to send parameters to the application. In the case of **Afterbuild**, this is the **tests campaign** to launch automatically on application start.
+Argument `args` is used to send parameters to the application. In the case of **Afterbuild**, this is the **tests campaign** to launch automatically when application starts.
 
-Application can handle that argument using the `userDefaults` such as the following example
+The application handles that argument using the `UserDefaults` such as in the following example
 
 ```swift
 
@@ -153,7 +153,7 @@ Application can handle that argument using the `userDefaults` such as the follow
 
 ### Stopping an application
 
-An application can be stopped by launching the command:
+An application is stopped by launching the command:
 
 ```bash
 
@@ -161,6 +161,6 @@ $ simcli appterminate "com.olivier.AfterbuildTest"
 
 ```
 
-_Note_: This commands requires the bundleId of the application.
+_Note_: This command requires the bundleId of the application.
 
 ### To complete...

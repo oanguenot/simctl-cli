@@ -47,10 +47,12 @@ struct Simustart: ParsableCommand {
         case .failure(let error):
             throw RuntimeError("Couldn't get simulator list '\(String(error.code))'!")
         case .success(let object):
-            let json = (try! JSONSerialization.jsonObject(with: object.data, options: [])) as! Dictionary<String, Any>
-            let runtimes = json["devices"] as! Dictionary<String, Array<Any>>
-            let allDevices = runtimes.values.flatMap { $0 } as! Array<Dictionary<String, AnyHashable>>
-            deviceFound = getDeviceIfExist(listOfDevices: allDevices, model: model)
+            if let data = object.data {
+                let json = (try! JSONSerialization.jsonObject(with: data, options: [])) as! Dictionary<String, Any>
+                let runtimes = json["devices"] as! Dictionary<String, Array<Any>>
+                let allDevices = runtimes.values.flatMap { $0 } as! Array<Dictionary<String, AnyHashable>>
+                deviceFound = getDeviceIfExist(listOfDevices: allDevices, model: model)
+            }
         }
         
         guard let device = deviceFound else {

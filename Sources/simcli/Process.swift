@@ -18,22 +18,25 @@ struct CommandError: Error {
 
 struct CommandResult {
     var code: Int
-    var data: Data
+    var data: Data?
 }
 
 extension Process {
     
     @discardableResult
-    func exe(command: String, withVerboseMode: Bool, _ args: [String]) -> Result<CommandResult, CommandError> {
+    func exe(command: String, withCapture: Bool = true, withVerboseMode: Bool, _ args: [String]) -> Result<CommandResult, CommandError> {
         
-        logging(verbose: withVerboseMode, text:"executing exe command \(command)...")
+        logging(verbose: withVerboseMode, text:"Executing command \(command)...")
         
         self.launchPath = command
         self.arguments = args
         
         let pipe = Pipe()
-        self.standardOutput = pipe
-        self.standardError = pipe
+        
+        if(withCapture) {
+            self.standardOutput = pipe
+            self.standardError = pipe
+        }
         
         if #available(OSX 10.14, *) {
             do {
@@ -48,11 +51,25 @@ extension Process {
         
         self.waitUntilExit()
         
-        let data = pipe.fileHandleForReading.readDataToEndOfFile()
-        let output = String(data: data, encoding: .utf8) ?? ""
+//        self.terminationHandler = { process in
+//             logging(verbose: true, text:"task finished")
+//        }
+       
+        var data: Data?
+        var output: String = ""
+        if(withCapture) {
+            data = pipe.fileHandleForReading.readDataToEndOfFile()
+            if let data = data {
+                output = String(data: data, encoding: .utf8) ?? ""
+            }
+        }
+        
+        logging(verbose: true, text:"Command terminated with status [\(String(self.terminationStatus))]")
         
         if self.terminationStatus != 0 {
-            logging(verbose: true, text:output)
+            if(withCapture) {
+                logging(verbose: true, text:output)
+            }
             return .failure(CommandError(code: Int(self.terminationStatus), type: .NOT_TERMINATED))
         } else {
             logging(verbose: withVerboseMode, text:output)
@@ -61,28 +78,28 @@ extension Process {
     }
 
     @discardableResult
-    func xcrun(withVerboseMode: Bool = false, _ args: String...) -> Result<CommandResult, CommandError> {
-        return self.exe(command: "/usr/bin/xcrun", withVerboseMode: withVerboseMode, args)
+    func xcrun(withVerboseMode: Bool = false, withCapture: Bool = true, _ args: String...) -> Result<CommandResult, CommandError> {
+        return self.exe(command: "/usr/bin/xcrun", withCapture: withCapture, withVerboseMode: withVerboseMode, args)
     }
     
     @discardableResult
-    func build(withVerboseMode: Bool = false,_ args: String...) -> Result<CommandResult, CommandError> {
-        return self.exe(command: "/usr/bin/xcodebuild", withVerboseMode: withVerboseMode, args)
+    func build(withVerboseMode: Bool = false, withCapture: Bool = true ,_ args: String...) -> Result<CommandResult, CommandError> {
+        return self.exe(command: "/usr/bin/xcodebuild", withCapture: withCapture , withVerboseMode: withVerboseMode, args)
     }
     
     @discardableResult
-    func carthage(withVerboseMode: Bool = false,_ args: String...) -> Result<CommandResult, CommandError> {
-        return self.exe(command: "/usr/local/bin/carthage", withVerboseMode: withVerboseMode, args)
+    func carthage(withVerboseMode: Bool = false, withCapture: Bool = true ,_ args: String...) -> Result<CommandResult, CommandError> {
+        return self.exe(command: "/usr/local/bin/carthage", withCapture: withCapture , withVerboseMode: withVerboseMode, args)
     }
     
     @discardableResult
-    func open(withVerboseMode: Bool = false,_ args: String...) -> Result<CommandResult, CommandError> {
-        return self.exe(command: "/usr/bin/open", withVerboseMode: withVerboseMode, args)
+    func open(withVerboseMode: Bool = false, withCapture: Bool = true ,_ args: String...) -> Result<CommandResult, CommandError> {
+        return self.exe(command: "/usr/bin/open", withCapture: withCapture , withVerboseMode: withVerboseMode, args)
     }
     
     @discardableResult
-    func utils(withVerboseMode: Bool = false,_ args: String...) -> Result<CommandResult, CommandError> {
-        return self.exe(command: "/usr/local/bin/applesimutils", withVerboseMode: withVerboseMode, args)
+    func utils(withVerboseMode: Bool = false, withCapture: Bool = true ,_ args: String...) -> Result<CommandResult, CommandError> {
+        return self.exe(command: "/usr/local/bin/applesimutils", withCapture: withCapture , withVerboseMode: withVerboseMode, args)
     }
 }
 

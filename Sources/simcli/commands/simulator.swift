@@ -91,7 +91,7 @@ struct Simustart: ParsableCommand {
         
         // start it
         logging(verbose: verbose, text: "\(model) simulator will be started")
-        let bootResult = Process().xcrun(withVerboseMode: verbose, "simctl", "boot", udid )
+        let bootResult = Process().xcrun(withVerboseMode: verbose, "simctl", "bootstatus", udid, "-b" )
         switch bootResult {
         case .success(_):
             logging(verbose: verbose, text: "\(model) simulator has been started")

@@ -164,11 +164,11 @@ struct Applaunch: ParsableCommand {
     @Argument(help: "The bundle identifier of the application")
     private var bundleId: String
     
-    @Flag(name: .long, help: "Show extra logging for debugging purposes")
-    private var verbose: Bool
-    
     @Option(name: .shortAndLong, default: "", help: "The tests to launch using a comma delimited string (ex: test_A,test_B)")
     private var args: String
+    
+    @Flag(name: .long, help: "Show extra logging for debugging purposes")
+    private var verbose: Bool
     
     func run() throws {
         logging(verbose: true, text: "[SIMCLI] Launch application \(bundleId)")

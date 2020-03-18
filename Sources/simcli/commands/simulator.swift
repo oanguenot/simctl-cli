@@ -111,7 +111,8 @@ struct Simustart: ParsableCommand {
             }
         }
         
-        logging(verbose: true, text: "\n✅ Successfully started \(name) [\(udid)]")
+        logging(verbose: true, text: "Successfully started \(name) [\(udid)]")
+        throw ExitCode.success
     }
 }
 
@@ -127,9 +128,11 @@ struct Simustop: ParsableCommand {
         let result: Result<CommandResult, CommandError> = Process().xcrun(withVerboseMode: verbose, "simctl", "shutdown", "all")
         switch result {
         case .success(_):
-            logging(verbose: true, text: "\n✅ Successfully stopped")
+            logging(verbose: true, text: "Successfully stopped")
         case .failure(_):
             throw RuntimeError("Couldn't execute the command!")
         }
+        
+        throw ExitCode.success
     }
 }

@@ -36,10 +36,12 @@ struct Appcompile: ParsableCommand {
         let result: Result<CommandResult, CommandError> = Process().build(withVerboseMode: verbose, withCapture: false, "-workspace", "\(path)", "-scheme", "\(scheme)", "-destination", "\(destination)", "-sdk", "\(sdk)", "-derivedDataPath", "./build", "clean", "build")
         switch result {
         case .success(_):
-            logging(verbose: true, text: "\n✅ Successfully compiled")
+            logging(verbose: true, text: "Successfully compiled")
         case .failure(_):
             throw RuntimeError("Couldn't compile the application!")
         }
+        
+        throw ExitCode.success
     }
 }
 
@@ -71,8 +73,7 @@ struct Appreplace: ParsableCommand {
                 
                 try stringToCopy.write(toFile: path, atomically: true, encoding: .utf8)
                 
-                logging(verbose: verbose, text: "version replaced and file updated")
-                logging(verbose: true, text: "\n✅ Successfully replaced")
+                logging(verbose: true, text: "Successfully updated")
             }
             catch {
                 throw RuntimeError("Couldn't replace the version!")
@@ -80,6 +81,8 @@ struct Appreplace: ParsableCommand {
         } else {
             throw RuntimeError("Couldn't find the file in path \(path)!")
         }
+        
+        throw ExitCode.success
     }
 }
 
@@ -98,10 +101,12 @@ struct Appdownload: ParsableCommand {
         let result: Result<CommandResult, CommandError> = Process().carthage(withVerboseMode: verbose, "update", "--project-directory", path)
         switch result {
         case .success(_):
-            logging(verbose: true, text: "\n✅ Successfully downloaded")
+            logging(verbose: true, text: "Successfully downloaded")
         case .failure(_):
             throw RuntimeError("Couldn't download the library!")
         }
+        
+        throw ExitCode.success
     }
 }
 
@@ -120,10 +125,12 @@ struct Appinstall: ParsableCommand {
         let result: Result<CommandResult, CommandError> = Process().xcrun(withVerboseMode: verbose, "simctl", "install", "booted", "./build/Build/Products/Debug-iphonesimulator/\(name).app")
         switch result {
         case .success(_):
-            logging(verbose: true, text: "\n✅ Successfully installed")
+            logging(verbose: true, text: "Successfully installed")
         case .failure(_):
             throw RuntimeError("Couldn't install the application \(name)!")
         }
+        
+        throw ExitCode.success
     }
 }
 
@@ -142,10 +149,12 @@ struct Appuninstall: ParsableCommand {
         let result: Result<CommandResult, CommandError> = Process().xcrun(withVerboseMode: verbose, "simctl", "uninstall", "booted", bundleId)
         switch result {
         case .success(_):
-            logging(verbose: true, text: "\n✅ Successfully uninstalled")
+            logging(verbose: true, text: "Successfully uninstalled")
         case .failure(_):
             throw RuntimeError("Couldn't uninstall application \(bundleId)!")
         }
+        
+        throw ExitCode.success
     }
 }
 
@@ -167,10 +176,12 @@ struct Applaunch: ParsableCommand {
         let result: Result<CommandResult, CommandError> = Process().xcrun(withVerboseMode: verbose, "simctl", "launch", "booted", bundleId, "-args", args)
         switch result {
         case .success(_):
-            logging(verbose: true, text: "\n✅ Successfully launched")
+            logging(verbose: true, text: "Successfully launched")
         case .failure(_):
             throw RuntimeError("Couldn't launch the application \(bundleId)!")
         }
+        
+        throw ExitCode.success
     }
 }
 
@@ -189,10 +200,12 @@ struct Appterminate: ParsableCommand {
         let result: Result<CommandResult, CommandError> = Process().xcrun(withVerboseMode: verbose, "simctl", "terminate", "booted", bundleId)
         switch result {
         case .success(_):
-            logging(verbose: true, text: "\n✅ Successfully terminated")
+            logging(verbose: true, text: "Successfully terminated")
         case .failure(_):
             throw RuntimeError("Couldn't launch the application \(bundleId)!")
         }
+        
+        throw ExitCode.success
     }
 }
 
@@ -211,9 +224,11 @@ struct Appsetpermissions: ParsableCommand {
         let result: Result<CommandResult, CommandError> = Process().utils(withVerboseMode: verbose, "--booted", "--bundle", bundleId, "--setPermissions", "microphone=YES")
         switch result {
         case .success(_):
-            logging(verbose: true, text: "\n✅ Successfully set")
+            logging(verbose: true, text: "Successfully set")
         case .failure(_):
             throw RuntimeError("Couldn't set permissions for application \(bundleId)!")
         }
+        
+        throw ExitCode.success
     }
 }

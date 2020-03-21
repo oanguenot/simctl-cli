@@ -232,3 +232,32 @@ struct Appsetpermissions: ParsableCommand {
         throw ExitCode.success
     }
 }
+
+struct Appgetdatapath: ParsableCommand {
+    public static let configuration = CommandConfiguration(abstract: "Get the path of the application data")
+    
+    @Argument(help: "The bundle identifier of the application")
+    private var bundleId: String
+    
+    @Flag(name: .long, help: "Show extra logging for debugging purposes")
+    private var verbose: Bool
+    
+    func run() throws {
+        logging(verbose: true, text: "[SIMCLI] Get application data path for \(bundleId)")
+        
+        let result: Result<CommandResult, CommandError> = Process().xcrun(withVerboseMode: verbose, "simctl", "get_app_container", "booted", bundleId, "data")
+        switch result {
+        case .success(let result):
+            logging(verbose: true, text: "Successfully got")
+            if let path = result.data {
+                let str =  String(data: path, encoding: .utf8) ?? ""
+                print(str)
+            }
+            
+        case .failure(_):
+            throw RuntimeError("Couldn't set permissions for application \(bundleId)!")
+        }
+        
+        throw ExitCode.success
+    }
+}

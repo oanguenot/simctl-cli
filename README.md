@@ -17,6 +17,7 @@ This tool allows to
 -   Install / uninstall application on Simulator
 -   Authorize the application to access the microphone (needed by the SDK)
 -   Start the app and automatically launch the tests
+-  Get the path where application stores data (when launched from the simulator)
 -   Get the result file
 
 This tool is deeply linked to [Rainbow](https://www.openrainbow.com) in a first step but the goal is to have at the end an agnostic CLI tool that help testers to automate their testing flows.
@@ -150,6 +151,21 @@ The application handles that argument using the `UserDefaults` such as in the fo
  }
 
 ```
+
+### Getting the application's data path
+
+This command returns the path where the application writes files.
+
+```bash
+
+$ simcli appgetdatapath "com.olivier.AfterbuildTest"
+
+```
+
+_Note_: This command requires the bundleId of the application.
+
+This command returns a string containing the path to the application's directory.
+
 
 ### Stopping an application
 

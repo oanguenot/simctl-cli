@@ -194,4 +194,18 @@ $ simcli appterminate "com.olivier.AfterbuildTest"
 
 _Note_: This command requires the bundleId of the application.
 
-### To complete...
+### Complete sample
+
+File `runafter.sh` is a `bash` script file that demonstrates the use of `simcli`. 
+
+This sample downloads a `Rainbow SDK` version and compiles our home-made tests application `Afterbuild IOS` with it. Once done, the script launches a simulator, executes the application and gets the `Jenkins JUnit XML` file generated. This automated process can be launched by `Jenkins`. 
+
+Don't hesitate to adapt for your needs.
+
+To launch it, execute the following command:
+
+```bash
+
+$ sh runafter.sh
+
+```

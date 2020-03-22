@@ -1,6 +1,6 @@
 # simcli
 
-Experimental command line tool written in Swift using [Swift-Argument-Parser](https://github.com/apple/swift-argument-parser) for automating tasks needed to test an application in the Simulator.
+`simcli` is an experimental command line tool written in Swift using [Swift-Argument-Parser](https://github.com/apple/swift-argument-parser) for automating tasks needed to test an application in the Simulator.
 
 ## Description
 
@@ -27,6 +27,21 @@ This tool is deeply linked to [Rainbow](https://www.openrainbow.com) in a first 
 [Apple Simulator Utils](https://github.com/wix/AppleSimulatorUtils) should be installed to set the application permissions.
 
 This is subject to change as rumors say that in Xcode 11.4, application's permissions will be managed directly in the Simulator for easing tests.
+
+And for sure `Xcode` and the `Command Line Tool`.
+
+## Installation
+
+After cloning the repository, launch the following commands to install `simcli` in your computer
+
+```bash
+
+$ swift build --configuration release
+$ cp -f .build/release/simcli /usr/local/bin/simcli
+
+```
+
+Just use `simcli` now to execute your commands
 
 ## Commands
 

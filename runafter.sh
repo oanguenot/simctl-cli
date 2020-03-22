@@ -17,15 +17,15 @@ hasExitOnError=0
 
 # Update Carthage file
 echo "----- [Update Rainbow SDK version in Cartfile] -----"
-swift run simcli appreplace "$projectPath/$projectName/Cartfile" --version $sdk
+simcli appreplace "$projectPath/$projectName/Cartfile" --version $sdk
 
 # Update Dependencies
 echo "----- [Download Rainbow SDK] -----"
-swift run simcli appdownload "$projectPath/$projectName"
+simcli appdownload "$projectPath/$projectName"
 
 # Compile application
 echo "----- [Compile Afterbuild] -----"
-swift run simcli appcompile "$projectPath/$projectName.xcworkspace" --scheme $projectName
+simcli appcompile "$projectPath/$projectName.xcworkspace" --scheme $projectName
 
 if [ $? -ne 0 ]
 then
@@ -35,11 +35,11 @@ fi
 
 # Start simulator
 echo "----- [Start simulator] -----"
-swift run simcli simustart --model "$model" --visible
+simcli simustart --model "$model" --visible
 
 # Install the application
 echo "----- [Install Afterbuild] -----"
-swift run simcli appinstall "$projectName"
+simcli appinstall "$projectName"
 
 # Get the path to the application's data
 path="$(swift run simcli appgetdatapath "com.olivier.AfterbuildTest")/Documents/afterbuild_jenkins.xml"
@@ -49,11 +49,11 @@ rm -rf $path
 
 # Set the permissions
 echo "----- [Set permissions] -----"
-swift run simcli appsetpermissions "$projectNamespace.$projectName"
+simcli appsetpermissions "$projectNamespace.$projectName"
 
 # Start the application
 echo "----- [Start application] -----"
-swift run simcli applaunch "$projectNamespace.$projectName" --args "$tests"
+simcli applaunch "$projectNamespace.$projectName" --args "$tests"
 
 # Wait for the JUnit XML file to be created or a timeout
 while ! test -f "$path"; do
@@ -73,15 +73,15 @@ cp $path "./jenkins_$sdk.xml"
 
 # Stop the application
 echo "----- [Stop application] -----"
-swift run simcli appterminate "com.olivier.AfterbuildTest"
+simcli appterminate "com.olivier.AfterbuildTest"
 
 # Uninstall application
 echo "----- [Uninstall application] -----"
- swift run simcli appuninstall "com.olivier.AfterbuildTest"
+simcli appuninstall "com.olivier.AfterbuildTest"
 
 # Stop the simulator
 echo "----- [Stop simulator] -----"
- swift run simcli simustop
+simcli simustop
 
 if [ "$hasExitOnError" -ne 0 ]
 then

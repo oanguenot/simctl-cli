@@ -69,6 +69,7 @@ done
 
 # Get the XML result
 echo "----- [Get XML Result file] -----"
+cp $path "./jenkins_$sdk.xml"
 
 # Stop the application
 echo "----- [Stop application] -----"

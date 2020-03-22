@@ -51,10 +51,6 @@ extension Process {
         
         self.waitUntilExit()
         
-//        self.terminationHandler = { process in
-//             logging(verbose: true, text:"task finished")
-//        }
-       
         var data: Data?
         var output: String = ""
         if(withCapture) {
@@ -64,7 +60,7 @@ extension Process {
             }
         }
         
-        logging(verbose: true, text:"Command terminated with status [\(String(self.terminationStatus))]")
+        logging(verbose: withVerboseMode, text:"Command terminated with status [\(String(self.terminationStatus))]")
         
         if self.terminationStatus != 0 {
             if(withCapture) {

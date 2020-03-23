@@ -1,12 +1,7 @@
 language: swift
-xcode_project: simcli.xcodeproj
-xcode_scheme: simcli
-
-os: osx
+install: swift package update
+os:
+    - osx
 osx_image: xcode11.3
-
-before_install:
-    - brew install git-lfs
-
-before_script:
-    - git lfs pull
+script:
+    - swift build

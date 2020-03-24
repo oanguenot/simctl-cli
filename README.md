@@ -8,19 +8,20 @@ When building a library or SDK that connects to a platform such as [Rainbow](htt
 
 The goal of this tool is to automate as much as possible all the tasks in order to be able to configure and test all the existing versions of the library/SDK in an autonomous way.
 
-This tool allows to
+Additionnaly, we use an ALE home-made SDK-testing tool called `Afterbuild IOS` which is an application that connects to our **Rainbow** platform and calls public API of the SDK based on JSON scenarios. **Afterbuild IOS** will then check the public events and/or data received in order to make assertions. Results of these assertions are saved into a **JUnit XML file**.
+
+`simcli` proposes the following commands:
 
 -   Select the Rainbow SDK version to use from Carthage (ie: replace the version in `Cartfile`)
--   Install it into the application path (ie: `carthage update`)
--   Compile the application using `xcodebuild`
+-   Install it into the **Afterbuild IOS** application path (ie: `carthage update`)
+-   Compile the **Afterbuild IOS** application using `xcodebuild`
 -   Start a `Simulator`
--   Install / uninstall application on Simulator
--   Authorize the application to access the microphone (needed by the SDK)
--   Start the app and automatically launch the tests
--   Get the path where application stores data (when launched from the simulator)
--   Get the result file
+-   Install / uninstall the **Afterbuild IOS** application to Simulator
+-   Authorize the **Afterbuild IOS** application to access the microphone (needed by the SDK)
+-   Start the **Afterbuild IOS** application and automatically launch the tests campaign
+-   Get the path where the **Afterbuild IOS** application stores data (when launched from the simulator) in order to retrieve the JUnit XML file
 
-This tool is deeply linked to [Rainbow](https://www.openrainbow.com) in a first step but the goal is to have at the end an agnostic CLI tool that help testers to automate their testing flows.
+This tool is deeply linked to [Rainbow](https://www.openrainbow.com) and **Afterbuild IOS** in a first step but the goal is to have at the end an agnostic CLI tool that help testers to automate their own testing flows.
 
 ## Prerequisites
 
@@ -33,7 +34,7 @@ brew install applesimutils
 
 ```
 
-This is subject to change as rumors say that in Xcode 11.4, application's permissions will be managed directly in the Simulator for easing tests.
+This is subject to change as rumors say that in Xcode 11.4, application's permissions will be managed directly by `xcrun` for easing tests.
 
 And for sure `Xcode` and the `Command Line Tool`.
 

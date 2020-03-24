@@ -17,14 +17,21 @@ This tool allows to
 -   Install / uninstall application on Simulator
 -   Authorize the application to access the microphone (needed by the SDK)
 -   Start the app and automatically launch the tests
--  Get the path where application stores data (when launched from the simulator)
+-   Get the path where application stores data (when launched from the simulator)
 -   Get the result file
 
 This tool is deeply linked to [Rainbow](https://www.openrainbow.com) in a first step but the goal is to have at the end an agnostic CLI tool that help testers to automate their testing flows.
 
 ## Prerequisites
 
-[Apple Simulator Utils](https://github.com/wix/AppleSimulatorUtils) should be installed to set the application permissions.
+[Apple Simulator Utils](https://github.com/wix/AppleSimulatorUtils) should be installed to set the application permissions. To install AppleSimulatorUtils, just use the following commands
+
+```bash
+
+brew tap wix/brew
+brew install applesimutils
+
+```
 
 This is subject to change as rumors say that in Xcode 11.4, application's permissions will be managed directly in the Simulator for easing tests.
 
@@ -181,7 +188,6 @@ _Note_: This command requires the bundleId of the application.
 
 This command returns a string containing the path to the application's directory.
 
-
 ### Stopping an application
 
 An application is stopped by launching the command:
@@ -196,9 +202,9 @@ _Note_: This command requires the bundleId of the application.
 
 ### Complete sample
 
-File `runafter.sh` is a `bash` script file that demonstrates the use of `simcli`. 
+File `runafter.sh` is a `bash` script file that demonstrates the use of `simcli`.
 
-This sample downloads a `Rainbow SDK` version and compiles our home-made tests application `Afterbuild IOS` with it. Once done, the script launches a simulator, executes the application and gets the `Jenkins JUnit XML` file generated. This automated process can be launched by `Jenkins`. 
+This sample downloads a `Rainbow SDK` version and compiles our home-made tests application `Afterbuild IOS` with it. Once done, the script launches a simulator, executes the application and gets the `Jenkins JUnit XML` file generated. This automated process can be launched by `Jenkins`.
 
 Don't hesitate to adapt for your needs.
 

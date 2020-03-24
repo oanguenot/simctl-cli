@@ -1,4 +1,4 @@
-# simcli
+# simcli [![Build Status](https://travis-ci.org/oanguenot/simctl-cli.svg?branch=master)](https://travis-ci.org/oanguenot/simctl-cli)
 
 `simcli` is an experimental command line tool written in Swift using [Swift-Argument-Parser](https://github.com/apple/swift-argument-parser) for automating tasks needed to test an application in the Simulator.
 

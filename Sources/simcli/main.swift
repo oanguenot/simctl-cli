@@ -22,7 +22,7 @@ struct simctlcli: ParsableCommand {
             Appuninstall.self,
             Applaunch.self,
             Appterminate.self,
-            Appsetpermissions.self,
+            Appgrantpermissions.self,
             Appgetdatapath.self
         ]
     )

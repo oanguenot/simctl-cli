@@ -1,6 +1,6 @@
-# simcli [![Build Status](https://travis-ci.org/oanguenot/simctl-cli.svg?branch=master)](https://travis-ci.org/oanguenot/simctl-cli)
+# SimCLI [![Build Status](https://travis-ci.org/oanguenot/simctl-cli.svg?branch=master)](https://travis-ci.org/oanguenot/simctl-cli)
 
-`simcli` is an experimental command line tool written in Swift using [Swift-Argument-Parser](https://github.com/apple/swift-argument-parser) for automating tasks needed to test an application in the Simulator.
+`SimCLI` is an experimental command line tool written in Swift using [Swift-Argument-Parser](https://github.com/apple/swift-argument-parser) for automating tasks needed to test an application in the Simulator.
 
 ## Description
 
@@ -10,7 +10,7 @@ The goal of this tool is to automate as much as possible all the tasks in order 
 
 Additionnaly, we use an ALE home-made SDK-testing tool called `Afterbuild IOS` which is an application that connects to our **Rainbow** platform and calls public API of the SDK based on JSON scenarios. **Afterbuild IOS** will then check the public events and/or data received in order to make assertions. Results of these assertions are saved into a **JUnit XML file**.
 
-`simcli` proposes the following commands:
+`SimCLI` proposes the following commands:
 
 -   Select the Rainbow SDK version to use from Carthage (ie: replace the version in `Cartfile`)
 -   Install it into the **Afterbuild IOS** application path (ie: `carthage update`)
@@ -25,22 +25,11 @@ This tool is deeply linked to [Rainbow](https://www.openrainbow.com) and **After
 
 ## Prerequisites
 
-[Apple Simulator Utils](https://github.com/wix/AppleSimulatorUtils) should be installed to set the application permissions. To install AppleSimulatorUtils, just use the following commands
-
-```bash
-
-brew tap wix/brew
-brew install applesimutils
-
-```
-
-This is subject to change as rumors say that in Xcode 11.4, application's permissions will be managed directly by `xcrun` for easing tests.
-
-And for sure `Xcode` and the `Command Line Tool`.
+`XCode 11.4` (Minimum) and the associated `Command Line Tool` are required.
 
 ## Installation
 
-After cloning the repository, launch the following commands to install `simcli` in your computer
+After cloning the repository, launch the following commands to install `SimCLI` in your computer
 
 ```bash
 
@@ -49,7 +38,7 @@ $ cp -f .build/release/simcli /usr/local/bin/simcli
 
 ```
 
-Just use `simcli` now to execute your commands
+Just use `SimCLI` now to execute your commands
 
 ## Commands
 
@@ -62,6 +51,8 @@ This command replaces the version of the [Rainbow SDK](https://hub.openrainbow.c
 $ simcli appreplace "/Users/oan/github/afterbuildios/AfterbuildTest/Cartfile" --version "1.70.5"
 
 ```
+
+Note: At this time of writing, `SimCLI` rewrites the Carthage file by just adding an hardcoded reference to the `Rainbow SDK` version specified.
 
 ### Update Carthage dependencies
 
@@ -84,6 +75,10 @@ This command compiles the application by selecting the project and the scheme.
 $ simcli appcompile "/Users/oan/github/afterbuildios/AfterbuildTest.xcworkspace" --scheme "AfterbuildTest"
 
 ```
+
+Option `--destination` could be used to specify how it should be compiled. By default equals to  `platform=iOS Simulator,name=iPhone 8,OS=13.4`.
+
+Option `--sdk` can be used. By default equals to `iphonesimulator`.
 
 ### Starting simulator
 
@@ -135,15 +130,13 @@ $ simcli appuninstall "com.olivier.AfterbuildTest"
 
 _Note_: This command requires the bundleId of the application.
 
-### Setting permissions
+### Grant permissions
 
-The application needs to access the microphone (ie: a popup to authorize the application is displayed when the application starts) to work properly.
-
-This command (based on **Apple Simulator Utils**) authorizes the application automatically (ie: without user interaction).
+If the application needs some permissions, you can use that command to set `all` permissions to the application.
 
 ```bash
 
-$ simcli appsetpermissions "com.olivier.AfterbuildTest"
+$ simcli appgrantpermissions "com.olivier.AfterbuildTest"
 
 ```
 

@@ -18,7 +18,7 @@ struct Appcompile: ParsableCommand {
     @Option(name: .shortAndLong, default: "", help: "The scheme")
     private var scheme: String
     
-    @Option(name: .shortAndLong, default: "platform=iOS Simulator,name=iPhone 8,OS=13.3", help: "The destination")
+    @Option(name: .shortAndLong, default: "platform=iOS Simulator,name=iPhone 8,OS=13.4", help: "The destination")
     private var destination: String
     
     @Option(name: .shortAndLong, default: "iphonesimulator", help: "The sdk")
@@ -209,8 +209,8 @@ struct Appterminate: ParsableCommand {
     }
 }
 
-struct Appsetpermissions: ParsableCommand {
-    public static let configuration = CommandConfiguration(abstract: "Set application needed permissions")
+struct Appgrantpermissions: ParsableCommand {
+    public static let configuration = CommandConfiguration(abstract: "Grant all permissions to application")
     
     @Argument(help: "The bundle identifier of the application")
     private var bundleId: String
@@ -219,14 +219,14 @@ struct Appsetpermissions: ParsableCommand {
     private var verbose: Bool
     
     func run() throws {
-        logging(verbose: true, text: "[SIMCLI] Set permissions for \(bundleId)")
+        logging(verbose: true, text: "[SIMCLI] Grant all permissions for \(bundleId)")
         
-        let result: Result<CommandResult, CommandError> = Process().utils(withVerboseMode: verbose, "--booted", "--bundle", bundleId, "--setPermissions", "microphone=YES")
+        let result: Result<CommandResult, CommandError> = Process().xcrun(withVerboseMode: verbose, "simctl", "privacy", "booted", "grant", "all", bundleId)
         switch result {
         case .success(_):
-            logging(verbose: true, text: "Successfully set")
+            logging(verbose: true, text: "Successfully granted")
         case .failure(_):
-            throw RuntimeError("Couldn't set permissions for application \(bundleId)!")
+            throw RuntimeError("Couldn't grant permissions for application \(bundleId)!")
         }
         
         throw ExitCode.success

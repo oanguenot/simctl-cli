@@ -206,6 +206,8 @@ To launch it, execute the following command:
 
 ```bash
 
-$ sh runafter.sh
+$ sh runafter.sh "1.70.0"
 
 ```
+
+The parameter `1.70.0` is the **Rainbow SDK** version to install.

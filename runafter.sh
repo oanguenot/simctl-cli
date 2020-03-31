@@ -1,8 +1,15 @@
 #!/bin/bash
 echo "----- [Starting Afterbuid script] -----"
 
+if [ $# -eq 0 ]
+  then
+    sdk="1.68.0"
+else
+    sdk=$1
+fi
+
 # Variables
-sdk="1.68.0"
+
 model="iPhone 8"
 projectName="AfterbuildTest"
 projectPath="/Users/oan/github/afterbuildios"
